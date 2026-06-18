@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment Variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Alembic
+alembic/versions/__pycache__/
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Database
+*.db
+*.sqlite3
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Mypy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
