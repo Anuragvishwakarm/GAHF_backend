@@ -19,7 +19,11 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    pass
+    name: str
+    description: str | None = None
+    price: float
+    category_id: int
+    stock: int
 
 
 class ProductUpdate(BaseModel):
@@ -31,6 +35,7 @@ class ProductUpdate(BaseModel):
 
 class ProductOut(ProductBase):
     id: int
+    stock: int
     images: List[ProductImageOut] = []
 
     class Config:

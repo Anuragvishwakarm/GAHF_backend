@@ -11,5 +11,7 @@ class Product(Base):
     price = Column(Float, nullable=False)
 
     category_id = Column(Integer, ForeignKey("categories.id"))
+    stock = Column(Integer, default=0, nullable=False)
+    low_stock_threshold = Column(Integer, default=5,nullable=False)
 
-    images = relationship("ProductImage", back_populates="product", cascade="all, delete")
+    images = relationship("ProductImage", back_populates="product", cascade="all, delete",lazy="selectin")

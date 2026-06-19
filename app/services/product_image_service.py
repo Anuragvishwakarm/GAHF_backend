@@ -1,8 +1,13 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import select
 from app.models.product_image import ProductImage
 
 
-def add_product_image(db: Session, product_id: int, image_url: str, is_primary: bool = False):
+async def add_product_image(
+    db,
+    product_id: int,
+    image_url: str,
+    is_primary: bool = False,
+):
     image = ProductImage(
         product_id=product_id,
         image_url=image_url,
@@ -10,21 +15,37 @@ def add_product_image(db: Session, product_id: int, image_url: str, is_primary: 
     )
 
     db.add(image)
-    db.commit()
-    db.refresh(image)
+
+    await db.commit()
+    await db.refresh(image)
+
     return image
 
 
-def get_product_images(db: Session, product_id: int):
-    return db.query(ProductImage).filter(ProductImage.product_id == product_id).all()
+async def get_product_images(db, product_id: int):
+    result = await db.execute(
+        select(ProductImage).where(
+            ProductImage.product_id == product_id
+        )
+    )
+
+    return result.scalars().all()
 
 
-def delete_image(db: Session, image_id: int):
-    image = db.query(ProductImage).filter(ProductImage.id == image_id).first()
+async def delete_image(db, image_id: int):
+
+    result = await db.execute(
+        select(ProductImage).where(
+            ProductImage.id == image_id
+        )
+    )
+
+    image = result.scalar_one_or_none()
 
     if not image:
         return None
 
-    db.delete(image)
-    db.commit()
+    await db.delete(image)
+    await db.commit()
+
     return True

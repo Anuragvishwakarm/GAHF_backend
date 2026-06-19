@@ -18,9 +18,19 @@ async def create_product(
 
 
 # GET ALL PRODUCTS
-@router.get("/", response_model=list[ProductOut])
-async def get_products(db: AsyncSession = Depends(get_db)):
-    return await product_service.get_products(db)
+@router.get("/")
+async def get_products(
+    search: str | None = None,
+    page: int = 1,
+    limit: int = 10,
+    db: AsyncSession = Depends(get_db),
+):
+    return await product_service.get_products(
+        db=db,
+        search=search,
+        page=page,
+        limit=limit,
+    )
 
 
 # GET SINGLE PRODUCT

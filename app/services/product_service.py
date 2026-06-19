@@ -1,4 +1,6 @@
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.product import Product
@@ -16,8 +18,28 @@ async def create_product(db: AsyncSession, data):
 
 
 # GET ALL PRODUCTS
-async def get_products(db: AsyncSession):
-    result = await db.execute(select(Product))
+async def get_products(
+    db,
+    search: str | None = None,
+    page: int = 1,
+    limit: int = 10,
+):
+    offset = (page - 1) * limit
+
+    stmt = (
+        select(Product)
+        .options(selectinload(Product.images))
+    )
+
+    if search:
+        stmt = stmt.where(
+            Product.name.ilike(f"%{search}%")
+        )
+
+    stmt = stmt.offset(offset).limit(limit)
+
+    result = await db.execute(stmt)
+
     return result.scalars().all()
 
 
